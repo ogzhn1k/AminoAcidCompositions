@@ -4,13 +4,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProteinScript {
 
 	public static void main(String[] args) {
-		String fileRName = "C:\\WorkSpace-Java\\BIL466\\iva_raw.txt";
-		String fileWName = "C:\\WorkSpace-Java\\BIL466\\protA20.txt";
-		HashMap<Character, Float> probMap = new HashMap<Character, Float>();
+		String fileRName = "C:\\WorkSpace-Java\\BIL466\\noneff_raw.txt";
+		String fileWName = "C:\\WorkSpace-Java\\BIL466\\protNonEff20.txt";
+		Map<Character, Float> probMap = new HashMap<Character, Float>();
 		char lineArray[];
 		String lastLine = null;
 
@@ -46,12 +47,15 @@ public class ProteinScript {
 						
 						if(probMap.containsKey(lineArray[i]) == false) {
 							probMap.put(lineArray[i], ((float)counter)/(lineArray.length));
+							fileOut.print(probMap.get(lineArray[i])+",");
 						}
 						
 						counter = 0;
 					}// End of 1st for
 					
-					probMap.forEach((key,value) -> fileOut.print(value+","));
+					//probMap.forEach((key,value) -> fileOut.println(key+" : "+ value));
+					//probMap.forEach((key,value) -> fileOut.print(value+","));
+					fileOut.print("noneff");
 					fileOut.print("\r\n");
 					entireLine = ""; 
 					probMap.clear();
