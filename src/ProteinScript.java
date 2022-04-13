@@ -8,12 +8,12 @@ import java.util.HashMap;
 public class ProteinScript {
 
 	public static void main(String[] args) {
-		String fileRName = "";
-		String fileWName = "";
+		String fileRName = "C:\\WorkSpace-Java\\BIL466\\iva_raw.txt";
+		String fileWName = "C:\\WorkSpace-Java\\BIL466\\protA20.txt";
 		HashMap<Character, Float> probMap = new HashMap<Character, Float>();
-		int lineCount = 0;
 		char lineArray[];
-		
+		String lastLine = null;
+
 		try {
 			FileReader inputFile = new FileReader(fileRName);
 			FileWriter outputFile = new FileWriter(fileWName);
@@ -23,35 +23,45 @@ public class ProteinScript {
 			
 			PrintWriter fileOut = new PrintWriter(bufferWriter);
 			
-			String line;
+			String line = bufferReader.readLine();
+			String entireLine="";
 			
-			while((line = bufferReader.readLine()) != null) {
-				if(lineCount % 2 == 0) {
-					
-					System.out.println(line);
+			while(line != null) {
+				lastLine = line;
+				lineArray = line.toCharArray();
+				if(lineArray[0] != '>') 
+					entireLine += line;
+				
+				else {
+					System.out.println(entireLine);
 					int counter = 0;
-					lineArray = line.toCharArray();
+					lineArray = entireLine.toCharArray();
 					
 					for(int i=0 ; i<lineArray.length ; i++) {
 						for(int j=i ; j<lineArray.length ; j++) {
 							if(lineArray[i] == lineArray[j])
 								counter++;
 									
-						}
+						}// End of 2nd for
+						
 						if(probMap.containsKey(lineArray[i]) == false) {
-							System.out.println(counter + " ");
 							probMap.put(lineArray[i], ((float)counter)/(lineArray.length));
 						}
+						
 						counter = 0;
-					}
+					}// End of 1st for
 					
-					fileOut.println(lineCount + " ");
-					probMap.forEach((key,value) -> fileOut.println(key + " : " + value));
-					fileOut.println("\n\n\n");
-					
-				}
-				lineCount++;
-			}
+					probMap.forEach((key,value) -> fileOut.print(value+","));
+					fileOut.print("\r\n");
+					entireLine = ""; 
+					probMap.clear();
+				}	
+				
+				line = bufferReader.readLine();
+				
+			}// End of While
+			System.out.println(lastLine);
+
 			
 			bufferReader.close();
 			fileOut.close();
